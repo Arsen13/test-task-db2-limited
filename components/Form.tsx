@@ -1,21 +1,25 @@
 'use client';
 
 import { TranscriptType, UserType } from "@/app/page";
-import { useState } from "react";
 
 type FormProps = {
-    user: UserType,
+    user: UserType | null,
     setTranscript: React.Dispatch<React.SetStateAction<TranscriptType | null>>
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+    prevTranscriptionsLength: number | undefined
 }
 
-const Form = ({ user, setTranscript, setLoading }: FormProps) => {
+const Form = ({ user, setTranscript, setLoading, prevTranscriptionsLength }: FormProps) => {
 
     const handleInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
 
         if (e.target.files) {
             setLoading(true);
+
+            if (prevTranscriptionsLength === 2) {
+                alert("Give me your money!")
+            }
             try {
                 const formData = new FormData();
                 formData.append('file', e.target.files[0]);

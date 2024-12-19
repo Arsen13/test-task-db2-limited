@@ -5,13 +5,14 @@ import TranscriptedText from "@/components/TranscriptedText";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Sidebar from "@/components/Sidebar";
 import { useEffect, useState } from "react";
+import { FaCircleInfo } from "react-icons/fa6";
 
 export type UserType = {
   id: number,
   clerkId: string,
   email: string,
   username: string
-} | {};
+};
 
 export type TranscriptType = {
   id: number,
@@ -23,11 +24,10 @@ export type TranscriptType = {
 
 export default function Home() {
 
-  const [currentUser, setCurrentUser] = useState<UserType>({});
-  const [transcript, setTranscript] = useState<TranscriptType | null>(null)
+  const [currentUser, setCurrentUser] = useState<UserType | null>(null);
+  const [transcript, setTranscript] = useState<TranscriptType | null>(null);
+  const [userTranscriptions, setUserTranscriptions] = useState<TranscriptType[] | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const previousTranscriptions = false;
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -43,6 +43,26 @@ export default function Home() {
     getUserInfo();
   }, [])
 
+  useEffect(() => {
+    const getTranscriptions = async () => {
+      if (currentUser) {
+        const userId = new URLSearchParams({
+          userId: JSON.stringify(currentUser.id)
+        })
+        
+        const response = await fetch(`http://localhost:3000/api/transcription?${userId}`, {
+          method: "GET",
+        })
+  
+        const data = await response.json();
+  
+        setUserTranscriptions(data);
+      }
+    }
+
+    getTranscriptions();
+  }, [currentUser, transcript])
+
   return (
     <>
       <header className="flex flex-row-reverse mx-5 mt-5">
@@ -54,9 +74,11 @@ export default function Home() {
         </SignedIn>
       </header>
 
-      {previousTranscriptions && (
+      {userTranscriptions && (
         <aside className="fixed top-0 left-0">
-          <Sidebar />
+          <Sidebar 
+            transcriptions={userTranscriptions}
+          />
         </aside>
       )}
 
@@ -70,6 +92,7 @@ export default function Home() {
             user={currentUser} 
             setTranscript={setTranscript}
             setLoading={setLoading}
+            prevTranscriptionsLength={userTranscriptions?.length}
           />
 
           {transcript && (
@@ -77,7 +100,8 @@ export default function Home() {
           )}
 
           {loading && (
-            <div className="border rounded-lg px-6 py-2 pr-16 absolute bottom-3 right-3">
+            <div className="flex items-center gap-2 border rounded-lg px-6 py-2 pr-16 absolute bottom-3 right-3">
+              <FaCircleInfo className="text-blue-500 w-5 h-5"/>
               <p>
                 Starting transcription...
               </p>

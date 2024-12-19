@@ -1,19 +1,27 @@
-import Image from "next/image"
+import { TranscriptType } from "@/app/page"
+import { FaRegCopy } from "react-icons/fa6";
 
-const Transcription = () => {
+const Transcription = ({ transcription }: {transcription: TranscriptType}) => {
     return (
-        <div className="border-2 border-slate-400 border-dashed rounded-lg p-3 relative">
-            <p className="text-sm text-slate-600">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere natus pariatur ratione in, tenetur, eveniet perspiciatis aut deserunt doloribus incidunt amet, suscipit esse quam modi! Cumque quod ipsa corrupti dolorum!
-            </p>
+        <div className="border-2 border-slate-400 border-dashed rounded-lg p-3 flex gap-3 justify-between">
+            {transcription.transcript.length > 300 
+                ? (
+                    <p className="text-sm text-slate-600">
+                        {transcription.transcript.slice(0, 300)}...
+                    </p>
+                )
+                : (
+                    <p className="text-sm text-slate-600">
+                        {transcription.transcript}
+                    </p>
+                )
+                }
 
-            <div className="copy_btn absolute top-2 right-2 cursor-pointer">
-                <Image
-                    src='/icons/copy.svg'
-                    width={12}
-                    height={12}
-                    alt="Copy text icon"
-                />
+            <div 
+                className="copy_btn cursor-pointer rounded-full"
+                onClick={() => navigator.clipboard.writeText(transcription.transcript)}
+            >
+                <FaRegCopy className="w-4 h-4" />
             </div>
         </div>
     )

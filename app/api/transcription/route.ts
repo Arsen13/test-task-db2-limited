@@ -8,9 +8,6 @@ export async function POST(req: any) {
         const file = formData.get('file');
         const user = JSON.parse(formData.get('user'));
 
-        console.log(file);
-        console.log(user.id);
-
         if (!file || !(file instanceof Blob)) {
             return new Response("You must provide form data", { status: 404 });
         }
@@ -41,6 +38,25 @@ export async function POST(req: any) {
 
         return new Response(JSON.stringify(newTranscription), { status: 200 })
     
+    } catch (error) {
+        console.log(error);
+        return new Response("Internal server error", { status: 500 })
+    }
+}
+
+export async function GET(req: any) {
+    try {
+        const userId = req.nextUrl.searchParams.get('userId');
+
+        if (!userId) return new Response(JSON.stringify({ message: "User not provided"}), { status: 404 });
+
+        const transcriptions = await prisma.transcription.findMany({
+            where: {
+                user_id: Number(userId)
+            }
+        });
+        
+        return new Response(JSON.stringify(transcriptions), { status: 200 })
     } catch (error) {
         console.log(error);
         return new Response("Internal server error", { status: 500 })
