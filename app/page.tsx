@@ -1,20 +1,42 @@
 import Form from "@/components/Form";
 import TranscriptedText from "@/components/TranscriptedText";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import Sidebar from "@/components/Sidebar";
 
 export default function Home() {
-  const transcriptedText = true;
+  const transcriptedText = false;
+  const previousTranscriptions = false;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-5">
-      <h1 className="text-2xl font-semibold">
-        Audio Transcription
-      </h1>
-      
-      <Form />
+    <>
+      <header className="flex flex-row-reverse mx-5 mt-5">
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton showName />
+        </SignedIn>
+      </header>
 
-      {transcriptedText && (
-        <TranscriptedText />
+      {previousTranscriptions && (
+        <aside className="fixed top-0 left-0">
+          <Sidebar />
+        </aside>
       )}
-    </div>
-  );
+
+      <main className="flex items-center justify-center flex-grow mx-auto md:mx-auto">
+        <div className="flex flex-col items-center justify-center gap-5">
+          <h1 className="text-2xl font-semibold">
+            Audio Transcription
+          </h1>
+
+          <Form />
+
+          {transcriptedText && (
+            <TranscriptedText />
+          )}
+        </div>
+      </main>
+    </>
+);
 }
