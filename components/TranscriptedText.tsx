@@ -1,8 +1,9 @@
 'use client';
 
+import { TranscriptType } from "@/app/page";
 import { useState } from "react";
 
-const TranscriptedText = () => {
+const TranscriptedText = ({ transcript }: { transcript: TranscriptType }) => {
 
     const [showMore, setShowMore] = useState(false);
 
@@ -10,31 +11,23 @@ const TranscriptedText = () => {
         <div className="w-full max-w-md flex flex-col border border-slate-400 rounded-xl">
             <div className="flex items-center justify-around gap-5 p-3">
                 <p>
-                    Language
-                    <span className="font-bold block">ukraininan</span>
-                </p>
-                <p>
                     Duration
-                    <span className="font-bold block">47.8s</span>
+                    <span className="font-bold block">{transcript.duration.toFixed(2)}</span>
                 </p>
                 <p>
                     Words
-                    <span className="font-bold block">1,369</span>
+                    <span className="font-bold block">{transcript.words}</span>
                 </p>
             </div>
 
             <div className="p-3 text-sm text-slate-600">
                 {!showMore ? (
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt eaque animi, architecto, quia reiciendis consequatur nemo saepe accusantium soluta est vero molestias voluptatem fugiat. Quaerat impedit nobis explicabo provident magnam.</p>
+                    <p>
+                        {transcript.transcript.slice(0, 500)}...
+                    </p>
                 ): (
                     <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Error ullam voluptas, mollitia deleniti quia magni quae cum dolorem dolores aspernatur reprehenderit fugiat inventore numquam qui perspiciatis asperiores illum eius culpa.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Error ullam voluptas, mollitia deleniti quia magni quae cum dolorem dolores aspernatur reprehenderit fugiat inventore numquam qui perspiciatis asperiores illum eius culpa.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Error ullam voluptas, mollitia deleniti quia magni quae cum dolorem dolores aspernatur reprehenderit fugiat inventore numquam qui perspiciatis asperiores illum eius culpa.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Error ullam voluptas, mollitia deleniti quia magni quae cum dolorem dolores aspernatur reprehenderit fugiat inventore numquam qui perspiciatis asperiores illum eius culpa.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Error ullam voluptas, mollitia deleniti quia magni quae cum dolorem dolores aspernatur reprehenderit fugiat inventore numquam qui perspiciatis asperiores illum eius culpa.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Error ullam voluptas, mollitia deleniti quia magni quae cum dolorem dolores aspernatur reprehenderit fugiat inventore numquam qui perspiciatis asperiores illum eius culpa.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Error ullam voluptas, mollitia deleniti quia magni quae cum dolorem dolores aspernatur reprehenderit fugiat inventore numquam qui perspiciatis asperiores illum eius culpa.
+                        {transcript.transcript}
                     </p>
                 )}
             </div>
@@ -48,7 +41,7 @@ const TranscriptedText = () => {
                 </button>
 
                 <button
-                    onClick={() => {}}
+                    onClick={() => {navigator.clipboard.writeText(transcript.transcript)}}
                     className="bg-blue-700 px-3 py-2 border-none rounded-lg text-white"
                 >
                     Copy Transcription

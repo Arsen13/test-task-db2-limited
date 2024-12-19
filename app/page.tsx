@@ -1,11 +1,47 @@
+'use client';
+
 import Form from "@/components/Form";
 import TranscriptedText from "@/components/TranscriptedText";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Sidebar from "@/components/Sidebar";
+import { useEffect, useState } from "react";
+
+export type UserType = {
+  id: number,
+  clerkId: string,
+  email: string,
+  username: string
+} | {};
+
+export type TranscriptType = {
+  id: number,
+  duration: number,
+  transcript: string,
+  user_id: number,
+  words: number
+};
 
 export default function Home() {
-  const transcriptedText = false;
+
+  const [currentUser, setCurrentUser] = useState<UserType>({});
+  const [transcript, setTranscript] = useState<TranscriptType | null>(null)
+  const [loading, setLoading] = useState(false);
+
   const previousTranscriptions = false;
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const response = await fetch("http://localhost:3000/api/user", {
+        method: "GET"
+      });
+
+      const data = await response.json()
+
+      setCurrentUser(data);
+    }
+
+    getUserInfo();
+  }, [])
 
   return (
     <>
@@ -30,10 +66,22 @@ export default function Home() {
             Audio Transcription
           </h1>
 
-          <Form />
+          <Form 
+            user={currentUser} 
+            setTranscript={setTranscript}
+            setLoading={setLoading}
+          />
 
-          {transcriptedText && (
-            <TranscriptedText />
+          {transcript && (
+            <TranscriptedText transcript={transcript}/>
+          )}
+
+          {loading && (
+            <div className="border rounded-lg px-6 py-2 pr-16 absolute bottom-3 right-3">
+              <p>
+                Starting transcription...
+              </p>
+            </div>
           )}
         </div>
       </main>

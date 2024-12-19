@@ -1,4 +1,42 @@
-const Form = () => {
+'use client';
+
+import { TranscriptType, UserType } from "@/app/page";
+import { useState } from "react";
+
+type FormProps = {
+    user: UserType,
+    setTranscript: React.Dispatch<React.SetStateAction<TranscriptType | null>>
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const Form = ({ user, setTranscript, setLoading }: FormProps) => {
+
+    const handleInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+
+        if (e.target.files) {
+            setLoading(true);
+            try {
+                const formData = new FormData();
+                formData.append('file', e.target.files[0]);
+                formData.append('user', JSON.stringify(user));
+                
+                const response = await fetch('http://localhost:3000/api/transcription', {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+                setTranscript(data);
+
+            } catch (error) {
+                console.log(error)
+            } finally {
+                setLoading(false)
+            }
+        }
+    } 
+
     return (
         <form>
             <div>
@@ -14,6 +52,7 @@ const Form = () => {
                 id="inputFile"
                 accept="audio/*;"
                 className="hidden"
+                onChange={handleInput}
             />
             </div>
         </form>
