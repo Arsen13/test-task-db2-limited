@@ -16,9 +16,9 @@ export async function POST(req: NextRequest) {
 
     try {
         event = stripe.webhooks.constructEvent(rawBody, sig!, endpointSecret!);
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error(error);
-        return NextResponse.json({ error: error.message }, { status: 400 });
+        return NextResponse.json({ error: error }, { status: 400 });
     }
 
     if (event.type === 'checkout.session.completed') {

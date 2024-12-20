@@ -1,12 +1,17 @@
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@deepgram/sdk";
+import { NextRequest } from "next/server";
 
-export async function POST(req: any) {
+export async function POST(req: NextRequest) {
     try {
         const formData = await req.formData();
 
         const file = formData.get('file');
-        const user = JSON.parse(formData.get('user'));
+        const userData = formData.get('user');
+        if (!userData) {
+            return new Response("You must provide user data", { status: 404 });
+        }
+        const user = JSON.parse(userData as string)
 
         if (!file || !(file instanceof Blob)) {
             return new Response("You must provide form data", { status: 404 });
