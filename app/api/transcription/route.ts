@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
     }
 }
 
-export async function GET(req: any) {
+export async function GET(req: NextRequest) {
     try {
         const userId = req.nextUrl.searchParams.get('userId');
 

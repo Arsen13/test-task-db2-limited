@@ -29,7 +29,7 @@ const Form = ({ user, setTranscript, setLoading, prevTranscriptionsLength, userT
                 formData.append('file', e.target.files[0]);
                 formData.append('user', JSON.stringify(user));
                 
-                const response = await fetch('http://localhost:3000/api/transcription', {
+                const response = await fetch('https://test-task-db2-limited.vercel.app/api/transcription', {
                     method: "POST",
                     body: formData
                 });

@@ -42,7 +42,7 @@ export default function Home() {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      const response = await fetch("http://localhost:3000/api/user", {
+      const response = await fetch("https://test-task-db2-limited.vercel.app/api/user", {
         method: "GET"
       });
 
@@ -61,7 +61,7 @@ export default function Home() {
           userId: JSON.stringify(currentUser.id)
         })
         
-        const response = await fetch(`http://localhost:3000/api/transcription?${userId}`, {
+        const response = await fetch(`https://test-task-db2-limited.vercel.app/api/transcription?${userId}`, {
           method: "GET",
         })
   
