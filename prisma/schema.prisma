@@ -15,11 +15,12 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  clerkId  String @unique
-  email    String @unique
-  username String
-  transcriptions Transcription[]
+  id              Int    @id @default(autoincrement())
+  clerkId         String @unique
+  email           String @unique
+  username        String
+  transcriptions  Transcription[]
+  transactions    Transaction[]
 }
 
 model Transcription {
@@ -29,4 +30,15 @@ model Transcription {
   duration    Float
   words       Int
   author      User    @relation(fields: [user_id], references: [id])
+}
+
+model Transaction {
+  id                Int     @id @default(autoincrement())
+  user_id           Int
+  stripe_id         String
+  amount_total      Int
+  currency          String
+  customer_email    String
+  customer_name     String
+  author            User    @relation(fields: [user_id], references: [id])
 }

@@ -10,9 +10,11 @@ export async function GET() {
             }
         })
 
+        if (!prismaUser) return new Response("User not found", { status: 404 })
+
         return new Response(JSON.stringify(prismaUser), { status: 200 })
     } catch (error) {
-        console.log(error)
+        console.error(error instanceof Error ? error.message : error)
         return new Response("Internal server error", { status: 500 })
     }
 }

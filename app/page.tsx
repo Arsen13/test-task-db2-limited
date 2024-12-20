@@ -22,11 +22,22 @@ export type TranscriptType = {
   words: number
 };
 
+export type TransactionType = {
+  id: number,
+  user_id: number,
+  stripe_id: string,
+  amount_total: number,
+  currency: string,
+  customer_email: string,
+  customer_name: string
+};
+
 export default function Home() {
 
   const [currentUser, setCurrentUser] = useState<UserType | null>(null);
   const [transcript, setTranscript] = useState<TranscriptType | null>(null);
   const [userTranscriptions, setUserTranscriptions] = useState<TranscriptType[] | null>(null);
+  const [userTransactions, setUserTransactions] = useState<TransactionType[] | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -55,8 +66,9 @@ export default function Home() {
         })
   
         const data = await response.json();
-  
-        setUserTranscriptions(data);
+
+        setUserTranscriptions(data.transcriptions);
+        setUserTransactions(data.transactions);
       }
     }
 
@@ -93,6 +105,7 @@ export default function Home() {
             setTranscript={setTranscript}
             setLoading={setLoading}
             prevTranscriptionsLength={userTranscriptions?.length}
+            userTransactionsLength={userTransactions?.length}
           />
 
           {transcript && (

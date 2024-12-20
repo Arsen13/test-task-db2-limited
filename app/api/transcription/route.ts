@@ -55,8 +55,14 @@ export async function GET(req: any) {
                 user_id: Number(userId)
             }
         });
+
+        const transactions = await prisma.transaction.findMany({
+            where: {
+                user_id: Number(userId)
+            }
+        });
         
-        return new Response(JSON.stringify(transcriptions), { status: 200 })
+        return new Response(JSON.stringify({transcriptions, transactions}), { status: 200 })
     } catch (error) {
         console.log(error);
         return new Response("Internal server error", { status: 500 })

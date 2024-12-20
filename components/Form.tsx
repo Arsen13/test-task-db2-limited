@@ -6,21 +6,25 @@ type FormProps = {
     user: UserType | null,
     setTranscript: React.Dispatch<React.SetStateAction<TranscriptType | null>>
     setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-    prevTranscriptionsLength: number | undefined
+    prevTranscriptionsLength: number | undefined,
+    userTransactionsLength: number | undefined,
 }
 
-const Form = ({ user, setTranscript, setLoading, prevTranscriptionsLength }: FormProps) => {
+const Form = ({ user, setTranscript, setLoading, prevTranscriptionsLength, userTransactionsLength }: FormProps) => {
 
     const handleInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
 
         if (e.target.files) {
-            setLoading(true);
 
-            if (prevTranscriptionsLength === 2) {
-                alert("Give me your money!")
+            if (prevTranscriptionsLength === 2 && userTransactionsLength === 0) {
+                document.location.href = 'https://buy.stripe.com/test_6oE3cef8Cf4n10I288';
+                return;
             }
+            
             try {
+                setLoading(true);
+
                 const formData = new FormData();
                 formData.append('file', e.target.files[0]);
                 formData.append('user', JSON.stringify(user));
