@@ -2,6 +2,14 @@ import { prisma } from "@/lib/prisma";
 import { createClient } from "@deepgram/sdk";
 import { NextRequest } from "next/server";
 
+export const config = {
+    api: {
+      bodyParser: {
+        sizeLimit: '25mb',
+      },
+    },
+};  
+
 export async function POST(req: NextRequest) {
     try {
         const formData = await req.formData();
@@ -44,7 +52,7 @@ export async function POST(req: NextRequest) {
         return new Response(JSON.stringify(newTranscription), { status: 200 })
     
     } catch (error) {
-        console.log(error);
+        console.log(error instanceof Error ? error.message : error);
         return new Response(JSON.stringify({ message: "Internal server error" }), { status: 500 })
     }
 }
@@ -69,7 +77,7 @@ export async function GET(req: NextRequest) {
         
         return new Response(JSON.stringify({transcriptions, transactions}), { status: 200 })
     } catch (error) {
-        console.log(error);
+        console.log(error instanceof Error ? error.message : error);
         return new Response(JSON.stringify({ message: "Internal server error"} ), { status: 500 })
     }
 }
