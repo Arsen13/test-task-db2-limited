@@ -51,7 +51,12 @@ export default function Home() {
       setCurrentUser(data);
     }
 
-    getUserInfo();
+    const timer1 = setTimeout(() => {
+      getUserInfo();
+    }, 50)
+
+    return () => clearTimeout(timer1)
+
   }, [])
 
   useEffect(() => {
@@ -67,12 +72,16 @@ export default function Home() {
   
         const data = await response.json();
 
-        setUserTranscriptions(data.transcriptions);
-        setUserTransactions(data.transactions);
+        if (data.transactions) setUserTransactions(data.transactions);
+        if (data.transcriptions) setUserTranscriptions(data.transcriptions);
       }
     }
 
-    getTranscriptions();
+    const timer1 = setTimeout(() => {
+      getTranscriptions();
+    }, 100)
+
+    return () => clearTimeout(timer1)
   }, [currentUser, transcript])
 
   return (
