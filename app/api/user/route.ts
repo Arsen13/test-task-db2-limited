@@ -4,6 +4,9 @@ import { currentUser } from "@clerk/nextjs/server"
 export async function GET() {
     try {
         const user = await currentUser();
+
+        console.log("Receive user", user)
+
         const prismaUser = await prisma.user.findUnique({
             where: {
                 email: user?.emailAddresses[0].emailAddress

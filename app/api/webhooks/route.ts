@@ -13,6 +13,8 @@ export async function POST(req: Request) {
   // Create new Svix instance with secret
   const wh = new Webhook(SIGNING_SECRET)
 
+  console.log("Clerk webhook here")
+
   // Get headers
   const headerPayload = await headers()
   const svix_id = headerPayload.get('svix-id')
