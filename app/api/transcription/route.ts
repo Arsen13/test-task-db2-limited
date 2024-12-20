@@ -9,12 +9,12 @@ export async function POST(req: NextRequest) {
         const file = formData.get('file');
         const userData = formData.get('user');
         if (!userData) {
-            return new Response("You must provide user data", { status: 404 });
+            return new Response(JSON.stringify({ message: "You must provide user data" }), { status: 404 });
         }
         const user = JSON.parse(userData as string)
 
         if (!file || !(file instanceof Blob)) {
-            return new Response("You must provide form data", { status: 404 });
+            return new Response(JSON.stringify({ message: "You must provide form data" }), { status: 404 });
         }
 
         const fileBuffer = Buffer.from(await file.arrayBuffer());
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
     
     } catch (error) {
         console.log(error);
-        return new Response("Internal server error", { status: 500 })
+        return new Response(JSON.stringify({ message: "Internal server error" }), { status: 500 })
     }
 }
 
@@ -70,6 +70,6 @@ export async function GET(req: NextRequest) {
         return new Response(JSON.stringify({transcriptions, transactions}), { status: 200 })
     } catch (error) {
         console.log(error);
-        return new Response("Internal server error", { status: 500 })
+        return new Response(JSON.stringify({ message: "Internal server error"} ), { status: 500 })
     }
 }

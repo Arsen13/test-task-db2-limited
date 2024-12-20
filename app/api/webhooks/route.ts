@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 
   // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response('Error: Missing Svix headers', {
+    return new Response(JSON.stringify({ error: 'Error: Missing Svix headers' }), {
       status: 400,
     })
   }
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
     }) as WebhookEvent
   } catch (err) {
     console.error('Error: Could not verify webhook:', err)
-    return new Response('Error: Verification error', {
+    return new Response(JSON.stringify({ error: 'Error: Verification error' }), {
       status: 400,
     })
   }
@@ -68,5 +68,5 @@ export async function POST(req: Request) {
 
   }
 
-  return new Response('Webhook received', { status: 200 })
+  return new Response(JSON.stringify({ message: 'Webhook received' }), { status: 200 })
 }

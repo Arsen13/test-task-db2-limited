@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
                 }
             })
     
-            if (!dbUser) return new Response("User not found", { status: 404 });
+            if (!dbUser) return new Response(JSON.stringify({ message: "User not found" }), { status: 404 });
     
             await prisma.transaction.create({
                 data: {
@@ -46,10 +46,10 @@ export async function POST(req: NextRequest) {
             
         } catch (error) {
             console.log(error instanceof Error ? error.message : error);
-            return new Response("Internal server error", { status: 500 })
+            return new Response(JSON.stringify({ message: "Internal server error" }), { status: 500 })
         }
     }
 
-    return new Response("Webhook received!", {status: 200})
+    return new Response(JSON.stringify({ message: "Webhook received!" }), {status: 200})
 
 }
