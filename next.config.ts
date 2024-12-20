@@ -2,9 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  api: {
-    bodyParser: {
-      sizeLimit: '25mb',
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '25mb',
     }
   },
   async headers() {
